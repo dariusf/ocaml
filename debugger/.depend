@@ -23,7 +23,7 @@ pos.cmi : ../bytecomp/instruct.cmi
 primitives.cmi : $(UNIXDIR)/unix.cmi
 printval.cmi : ../typing/types.cmi ../typing/path.cmi parser_aux.cmi \
     ../typing/env.cmi debugcom.cmi
-program_loading.cmi : primitives.cmi
+program_loading.cmi : primitives.cmi output_server.cmi
 program_management.cmi :
 question.cmi :
 show_information.cmi : ../bytecomp/instruct.cmi
@@ -105,6 +105,8 @@ input_handling.cmx : $(UNIXDIR)/unix.cmx primitives.cmx \
     input_handling.cmi
 int64ops.cmo : int64ops.cmi
 int64ops.cmx : int64ops.cmi
+output_server.cmo : output_server.cmi
+output_server.cmx : output_server.cmi
 lexer.cmo : parser.cmi lexer.cmi
 lexer.cmx : parser.cmx lexer.cmi
 loadprinter.cmo : ../typing/types.cmi ../bytecomp/symtable.cmi printval.cmi \
@@ -120,13 +122,13 @@ main.cmo : unix_tools.cmi $(UNIXDIR)/unix.cmi time_travel.cmi \
     parameters.cmi ../utils/misc.cmi input_handling.cmi frames.cmi exec.cmi \
     ../typing/env.cmi debugger_config.cmi ../utils/config.cmi \
     command_line.cmi ../typing/cmi_format.cmi ../utils/clflags.cmi \
-    checkpoints.cmi
+    checkpoints.cmi output_server.cmi
 main.cmx : unix_tools.cmx $(UNIXDIR)/unix.cmx time_travel.cmx \
     show_information.cmx question.cmx program_management.cmx primitives.cmx \
     parameters.cmx ../utils/misc.cmx input_handling.cmx frames.cmx exec.cmx \
     ../typing/env.cmx debugger_config.cmx ../utils/config.cmx \
     command_line.cmx ../typing/cmi_format.cmx ../utils/clflags.cmx \
-    checkpoints.cmx
+    checkpoints.cmx output_server.cmi
 parameters.cmo : primitives.cmi ../typing/envaux.cmi debugger_config.cmi \
     ../utils/config.cmi parameters.cmi
 parameters.cmx : primitives.cmx ../typing/envaux.cmx debugger_config.cmx \
@@ -157,10 +159,10 @@ printval.cmx : ../typing/types.cmx ../bytecomp/symtable.cmx \
     ../toplevel/genprintval.cmx debugcom.cmx printval.cmi
 program_loading.cmo : unix_tools.cmi $(UNIXDIR)/unix.cmi \
     primitives.cmi parameters.cmi input_handling.cmi debugger_config.cmi \
-    program_loading.cmi
+    program_loading.cmi output_server.cmi
 program_loading.cmx : unix_tools.cmx $(UNIXDIR)/unix.cmx \
     primitives.cmx parameters.cmx input_handling.cmx debugger_config.cmx \
-    program_loading.cmi
+    program_loading.cmi output_server.cmi
 program_management.cmo : unix_tools.cmi $(UNIXDIR)/unix.cmi \
     time_travel.cmi symbols.cmi question.cmi program_loading.cmi \
     primitives.cmi parameters.cmi int64ops.cmi input_handling.cmi history.cmi \

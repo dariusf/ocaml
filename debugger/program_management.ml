@@ -137,7 +137,7 @@ let initialize_loading () =
 (* Ensure the program is already loaded. *)
 let ensure_loaded () =
   if not !loaded then begin
-    print_string ":start\n";
+    Output_server.write_to_server ":start";
     flush Pervasives.stdout;
     if !program_name = "" then begin
       prerr_endline "No program specified.";

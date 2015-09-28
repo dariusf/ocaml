@@ -89,6 +89,14 @@ let generic_exec_unix cmdline = function () ->
            0 -> (* Try to detach the process from the controlling terminal,
                    so that it does not receive SIGINT on ctrl-C. *)
                 begin try ignore(setsid()) with Invalid_argument _ -> () end;
+
+                (* redirect stdout for this grandchild to a file *)
+                (* let fd = openfile "/Users/darius/ocaml/test.txt" [O_WRONLY; O_TRUNC; O_CREAT] 0o666 in *)
+                (* dup2 fd stdout; *)
+                (* close fd; *)
+
+                dup2 (Output_server.get_input_descr ()) stdout;
+
                 execv shell [| shell; "-c"; cmdline() |]
          | _ -> exit 0
        with x ->

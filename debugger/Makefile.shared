@@ -63,6 +63,7 @@ OBJS=\
 	pos.cmo \
 	checkpoints.cmo \
 	events.cmo \
+    output_server.cmo \
 	program_loading.cmo \
 	symbols.cmo \
 	breakpoints.cmo \

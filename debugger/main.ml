@@ -185,6 +185,7 @@ let function_placeholder () =
   raise Not_found
 
 let main () =
+  Output_server.start ();
   Callback.register "Debugger.function_placeholder" function_placeholder;
   try
     socket_name :=
