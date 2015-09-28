@@ -87,6 +87,17 @@ let eol =
 let matching_elements list name instr =
   List.filter (function a -> isprefix instr (name a)) !list
 
+let instr_step ppf lexbuf =
+  let step_count =
+    match opt_signed_int64_eol Lexer.lexeme lexbuf with
+    | None -> _1
+    | Some x -> x
+  in
+    ensure_loaded ();
+    reset_named_values();
+    step step_count;
+    show_current_event ppf
+
 let all_matching_instructions =
   matching_elements instruction_list (fun i -> i.instr_name)
 
@@ -94,9 +105,14 @@ let all_matching_instructions =
 (* XL 25-02-97 why? I find it very confusing. *)
 
 let matching_instructions instr =
-  let all = all_matching_instructions instr in
+(*   let all = all_matching_instructions instr in
   let prio = List.filter (fun i -> i.instr_prio) all in
   if prio = [] then all else prio
+ *)
+  [{ instr_name = "step"; instr_prio = true;
+       instr_action = instr_step; instr_repeat = true; instr_help =
+"step program until it reaches the next event.\n\
+Argument N means do this N times (or till program stops for another reason)." }]
 
 let matching_variables =
   matching_elements variable_list (fun v -> v.var_name)
@@ -188,14 +204,20 @@ let interprete_line ppf line =
     | Failure "int_of_string" ->
       error "Integer overflow"
 
+let is_done () =
+    match current_report () with
+    | Some {rep_type = Exited} -> true
+    | _ -> false
+
 let line_loop ppf line_buffer =
   resume_user_input ();
   let previous_line = ref "" in
     try
-      while true do
+      while not (is_done ()) do
         if !loaded then
           History.add_current_time ();
-        let new_line = string_trim (line line_buffer) in
+        (* let new_line = string_trim (line line_buffer) in *)
+        let new_line = "s" in
           let line =
             if new_line <> "" then
               new_line
@@ -305,17 +327,6 @@ let instr_reverse ppf lexbuf =
   reset_named_values();
   back_run ();
   show_current_event ppf
-
-let instr_step ppf lexbuf =
-  let step_count =
-    match opt_signed_int64_eol Lexer.lexeme lexbuf with
-    | None -> _1
-    | Some x -> x
-  in
-    ensure_loaded ();
-    reset_named_values();
-    step step_count;
-    show_current_event ppf
 
 let instr_back ppf lexbuf =
   let step_count =
