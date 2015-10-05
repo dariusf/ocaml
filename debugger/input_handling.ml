@@ -106,9 +106,8 @@ let stop_user_input () =
 let resume_user_input () =
   if not (List.mem_assoc !user_channel.io_fd !active_files) then begin
     if !interactif then begin
-      (* print_string !current_prompt; *)
-      (* flush Pervasives.stdout *)
-      ()
+      print_string !current_prompt;
+      flush Pervasives.stdout
       end;
     add_file !user_channel exit_main_loop
     end
