@@ -23,13 +23,10 @@ open Show_source
 open Breakpoints
 open Parameters
 
+let last_time = ref 0L
+
 (* Display information about the current event. *)
 let show_current_event ppf =
-  fprintf ppf "Time: %Li" (current_time ());
-  (match current_pc () with
-   | Some pc ->
-       fprintf ppf " - pc: %i" pc
-   | _ -> ());
   update_current_event ();
   reset_frame ();
   match current_report ()  with
@@ -37,22 +34,36 @@ let show_current_event ppf =
       fprintf ppf "@.Beginning of program.@.";
       show_no_point ()
   | Some {rep_type = (Event | Breakpoint); rep_program_pointer = pc} ->
+        
         let ev = get_current_event () in
-        fprintf ppf " - module %s@." ev.ev_module;
-        (match breakpoints_at_pc pc with
-         | [] ->
-             ()
-         | [breakpoint] ->
-             fprintf ppf "Breakpoint: %i@." breakpoint
-         | breakpoints ->
-             fprintf ppf "Breakpoints: %a@."
-             (fun ppf l ->
-               List.iter
-                (function x -> fprintf ppf "%i " x) l)
-             (List.sort compare breakpoints));
-        show_point ev true
+
+        let excluded_modules = ["Pervasives"; "CamlinternalFormatBasics"; "Std_exit"] in
+        let show_stuff = not (List.mem ev.ev_module excluded_modules) in
+
+        if not show_stuff then
+          ()
+          (* print_newline () *)
+        else begin
+          fprintf ppf ":time %Li@." (current_time ());
+          (* fprintf ppf " - module %s@." ev.ev_module; *)
+          (* flush Pervasives.stdout; *)
+          (match breakpoints_at_pc pc with
+           | [] ->
+               ()
+           | [breakpoint] ->
+               fprintf ppf "Breakpoint: %i@." breakpoint
+           | breakpoints ->
+               fprintf ppf "Breakpoints: %a@."
+               (fun ppf l ->
+                 List.iter
+                  (function x -> fprintf ppf "%i " x) l)
+               (List.sort compare breakpoints));
+
+          (* if show_stuff then *)
+            (* (show_point ev true) *)
+        end
   | Some {rep_type = Exited} ->
-      fprintf ppf "@.Program exit.@.";
+      fprintf ppf "@.:end@.";
       show_no_point ()
   | Some {rep_type = Uncaught_exc} ->
       fprintf ppf
