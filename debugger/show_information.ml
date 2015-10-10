@@ -61,7 +61,7 @@ let show_current_event ppf =
                (List.sort compare breakpoints));
 
           (* if show_stuff then *)
-            (* (show_point ev true) *)
+            (show_point ev true)
         end
   | Some {rep_type = Exited} ->
       Output_server.write_to_server ":exit";
