@@ -137,7 +137,7 @@ let initialize_loading () =
 (* Ensure the program is already loaded. *)
 let ensure_loaded () =
   if not !loaded then begin
-    print_string "Loading program... ";
+    print_string ":start\n";
     flush Pervasives.stdout;
     if !program_name = "" then begin
       prerr_endline "No program specified.";
@@ -150,7 +150,7 @@ let ensure_loaded () =
         prerr_endline "Waiting for connection...";
       main_loop ();
       loaded := true;
-      prerr_endline "done."
+      (* prerr_endline "done." *)
     with
       x ->
         kill_program();
