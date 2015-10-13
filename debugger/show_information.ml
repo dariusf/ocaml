@@ -37,13 +37,13 @@ let show_current_event ppf =
         
         let ev = get_current_event () in
 
-        let excluded_modules = ["Pervasives"; "CamlinternalFormatBasics"; "Std_exit"] in
-        let show_stuff = not (List.mem ev.ev_module excluded_modules) in
+        (* let excluded_modules = ["Pervasives"; "CamlinternalFormatBasics"; "Std_exit"] in *)
+        (* let show_stuff = not (List.mem ev.ev_module excluded_modules) in *)
 
-        if not show_stuff then
-          ()
+        (* if not show_stuff then *)
+          (* () *)
           (* print_newline () *)
-        else begin
+        (* else begin *)
           let time_string = sprintf ":time %Li@." (current_time ()) in
           Output_server.write_to_server time_string;
           (* fprintf ppf " - module %s@." ev.ev_module; *)
@@ -62,7 +62,7 @@ let show_current_event ppf =
 
           (* if show_stuff then *)
             (show_point ev true)
-        end
+        (* end *)
   | Some {rep_type = Exited} ->
       Output_server.write_to_server ":exit";
       show_no_point ()
