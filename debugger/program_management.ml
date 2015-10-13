@@ -137,8 +137,7 @@ let initialize_loading () =
 (* Ensure the program is already loaded. *)
 let ensure_loaded () =
   if not !loaded then begin
-    Output_server.write_to_server ":start";
-    flush Pervasives.stdout;
+    Output_server.write_to_server "Loading program...";
     if !program_name = "" then begin
       prerr_endline "No program specified.";
       raise Toplevel
@@ -150,7 +149,7 @@ let ensure_loaded () =
         prerr_endline "Waiting for connection...";
       main_loop ();
       loaded := true;
-      (* prerr_endline "done." *)
+      Output_server.write_to_server "done."
     with
       x ->
         kill_program();

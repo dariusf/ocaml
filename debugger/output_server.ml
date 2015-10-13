@@ -13,21 +13,34 @@ let get_input_descr () =
   | Some d -> d
 
 let output_channel = ref None
-(* let out_socket = ref None *)
 
-(* TODO close socket in parent? *)
+type client = Parent | Child
 
-let rec connect_to_socket parent () =
-  let which = if parent then "parent" else "child" in
-  let socket = Unix.socket Unix.PF_INET Unix.SOCK_STREAM 0 in
-  try
-    Unix.connect socket (Unix.ADDR_INET (my_addr, port));
-    let socket_out = Unix.out_channel_of_descr socket in
-    (* out_socket := Some socket; *)
-    output_channel := Some socket_out
-  with
-  | Unix.Unix_error (Unix.ECONNREFUSED, _, _) ->
-      print_endline @@ which ^ " could not connect to socket!"; connect_to_socket parent ()
+(* TODO close sockets properly on termination *)
+
+let string_of_client = function
+  | Parent -> "Parent"
+  | Child -> "Child"
+
+let print_as client msg =
+  print_endline @@ string_of_client client ^ ": " ^ msg
+
+let rec connect_to_socket client =
+  let rec try_connecting printed =
+    let socket = Unix.socket Unix.PF_INET Unix.SOCK_STREAM 0 in
+    try
+      Unix.connect socket (Unix.ADDR_INET (my_addr, port));
+      let socket_out = Unix.out_channel_of_descr socket in
+      output_channel := Some socket_out
+    with
+    | Unix.Unix_error (Unix.ECONNREFUSED, _, _) ->
+      if not printed then
+        print_as client "waiting to connect to socket..."
+      else ();
+      Unix.close socket;
+      Unix.sleep 1;
+      try_connecting true
+  in try_connecting false
 
 (* let shutdown () = *)
 (*   match !out_socket with *)
@@ -38,7 +51,7 @@ let write_to_server content =
   match !output_channel with
   | None -> ()
   | Some channel ->
-      print_endline @@ "sending " ^ content;
+      (* print_endline @@ "sending " ^ content; *)
       output_string channel content;
       output_string channel "\n";
       flush channel
@@ -56,15 +69,14 @@ let exit_if_parent_dead () =
   end
 
 let read_debuggee_output fd_in_channel =
-  let i = ref 0 in
+  (* let i = ref 0 in *)
   while true do
 
     (* safeguard *)
-    i := !i + 1;
-    if !i > 30 then (print_endline "dead, stopping"; exit 0) else ();
+    (* i := !i + 1; *)
+    (* if !i > 3000 then (print_endline "dead, stopping"; exit 0) else (); *)
 
     (* block on the descriptor and read some stuff *)
-    print_endline "CHILD STARTED BLOCKING";
     let line = try input_line fd_in_channel with End_of_file -> "" in
 
     match line with
@@ -80,13 +92,13 @@ let read_debuggee_output fd_in_channel =
 
 let process_child fd_in fd_out =
   Unix.close fd_out;
-  connect_to_socket false ();
+  connect_to_socket Child;
   let fd_in_channel = Unix.in_channel_of_descr fd_in in
   read_debuggee_output fd_in_channel
 
 let process_parent fd_in fd_out =
   Unix.close fd_in;
-  connect_to_socket true ();
+  connect_to_socket Parent;
   input_descr := Some fd_out
 
 let start () =
