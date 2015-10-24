@@ -1,0 +1,54 @@
+.TH "Longident" 3 2015-10-24 OCamldoc "OCaml library"
+.SH NAME
+Longident \- no description
+.SH Module
+Module   Longident
+.SH Documentation
+.sp
+Module
+.BI "Longident"
+ : 
+.B sig  end
+
+.sp
+
+.sp
+
+.sp
+.sp
+.I type t 
+=
+ | Lident
+.B of 
+.B string
+ | Ldot
+.B of 
+.B t * string
+ | Lapply
+.B of 
+.B t * t
+ 
+.sp
+
+.sp
+
+.I val flatten 
+: 
+.B t -> string list
+.sp
+
+.sp
+
+.I val last 
+: 
+.B t -> string
+.sp
+
+.sp
+
+.I val parse 
+: 
+.B string -> t
+.sp
+
+.sp

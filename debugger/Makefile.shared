@@ -14,7 +14,7 @@ include ../config/Makefile
 CAMLRUN ?= ../boot/ocamlrun
 CAMLYACC ?= ../boot/ocamlyacc
 
-CAMLC=$(CAMLRUN) ../ocamlc -g -nostdlib -I ../stdlib
+CAMLC=$(CAMLRUN) ../ocamlc -g -thread -nostdlib -I ../stdlib
 COMPFLAGS=-warn-error A -safe-string $(INCLUDES)
 LINKFLAGS=-linkall -I $(UNIXDIR)
 YACCFLAGS=
@@ -44,7 +44,8 @@ OTHEROBJS=\
   ../bytecomp/runtimedef.cmo ../bytecomp/bytesections.cmo \
   ../bytecomp/dll.cmo ../bytecomp/meta.cmo ../bytecomp/symtable.cmo \
   ../bytecomp/opcodes.cmo \
-  ../toplevel/genprintval.cmo
+  ../toplevel/genprintval.cmo \
+  ../otherlibs/systhreads/threads.cma
 
 
 OBJS=\

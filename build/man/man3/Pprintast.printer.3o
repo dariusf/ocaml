@@ -1,0 +1,552 @@
+.TH "Pprintast.printer" 3 2015-10-24 OCamldoc "OCaml library"
+.SH NAME
+Pprintast.printer \- no description
+.SH Class
+Class   Pprintast.printer
+.SH Documentation
+.sp
+.I class printer : 
+.B unit -> object  end
+
+.sp
+
+.sp
+
+.B Parameters: 
+.sp
+""
+
+.B unit
+
+
+
+
+.sp
+.sp
+.I val pipe : 
+.B bool
+
+.sp
+
+.sp
+.I val semi : 
+.B bool
+
+.sp
+
+.sp
+.I method binding : 
+.B Format.formatter -> Parsetree.value_binding -> unit
+
+.sp
+
+.sp
+.I method bindings : 
+.B Format.formatter -> Asttypes.rec_flag * Parsetree.value_binding list -> unit
+
+.sp
+
+.sp
+.I method case_list : 
+.B Format.formatter -> Parsetree.case list -> unit
+
+.sp
+
+.sp
+.I method class_expr : 
+.B Format.formatter -> Parsetree.class_expr -> unit
+
+.sp
+
+.sp
+.I method class_field : 
+.B Format.formatter -> Parsetree.class_field -> unit
+
+.sp
+
+.sp
+.I method class_params_def : 
+.B Format.formatter -> (Parsetree.core_type * Asttypes.variance) list -> unit
+
+.sp
+
+.sp
+.I method class_signature : 
+.B Format.formatter -> Parsetree.class_signature -> unit
+
+.sp
+
+.sp
+.I method class_structure : 
+.B Format.formatter -> Parsetree.class_structure -> unit
+
+.sp
+
+.sp
+.I method class_type : 
+.B Format.formatter -> Parsetree.class_type -> unit
+
+.sp
+
+.sp
+.I method class_type_declaration_list : 
+.B Format.formatter -> Parsetree.class_type_declaration list -> unit
+
+.sp
+
+.sp
+.I method constant : 
+.B Format.formatter -> Asttypes.constant -> unit
+
+.sp
+
+.sp
+.I method constant_string : 
+.B Format.formatter -> string -> unit
+
+.sp
+
+.sp
+.I method core_type : 
+.B Format.formatter -> Parsetree.core_type -> unit
+
+.sp
+
+.sp
+.I method core_type1 : 
+.B Format.formatter -> Parsetree.core_type -> unit
+
+.sp
+
+.sp
+.I method direction_flag : 
+.B Format.formatter -> Asttypes.direction_flag -> unit
+
+.sp
+
+.sp
+.I method directive_argument : 
+.B Format.formatter -> Parsetree.directive_argument -> unit
+
+.sp
+
+.sp
+.I method exception_declaration : 
+.B Format.formatter -> Parsetree.extension_constructor -> unit
+
+.sp
+
+.sp
+.I method expression : 
+.B Format.formatter -> Parsetree.expression -> unit
+
+.sp
+
+.sp
+.I method expression1 : 
+.B Format.formatter -> Parsetree.expression -> unit
+
+.sp
+
+.sp
+.I method expression2 : 
+.B Format.formatter -> Parsetree.expression -> unit
+
+.sp
+
+.sp
+.I method extension_constructor : 
+.B Format.formatter -> Parsetree.extension_constructor -> unit
+
+.sp
+
+.sp
+.I method label_exp : 
+.B Format.formatter ->
+.B   Asttypes.label * Parsetree.expression option * Parsetree.pattern -> unit
+
+.sp
+
+.sp
+.I method label_x_expression_param : 
+.B Format.formatter -> Asttypes.label * Parsetree.expression -> unit
+
+.sp
+
+.sp
+.I method list : 
+.B 'a.
+.B     ?sep:Pprintast.space_formatter ->
+.B     ?first:Pprintast.space_formatter ->
+.B     ?last:Pprintast.space_formatter ->
+.B     (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a list -> unit
+
+.sp
+
+.sp
+.I method longident : 
+.B Format.formatter -> Longident.t -> unit
+
+.sp
+
+.sp
+.I method longident_loc : 
+.B Format.formatter -> Longident.t Asttypes.loc -> unit
+
+.sp
+
+.sp
+.I method module_expr : 
+.B Format.formatter -> Parsetree.module_expr -> unit
+
+.sp
+
+.sp
+.I method module_type : 
+.B Format.formatter -> Parsetree.module_type -> unit
+
+.sp
+
+.sp
+.I method mutable_flag : 
+.B Format.formatter -> Asttypes.mutable_flag -> unit
+
+.sp
+
+.sp
+.I method option : 
+.B 'a.
+.B     ?first:Pprintast.space_formatter ->
+.B     ?last:Pprintast.space_formatter ->
+.B     (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a option -> unit
+
+.sp
+
+.sp
+.I method paren : 
+.B 'a.
+.B     ?first:Pprintast.space_formatter ->
+.B     ?last:Pprintast.space_formatter ->
+.B     bool -> (Format.formatter -> 'a -> unit) -> Format.formatter -> 'a -> unit
+
+.sp
+
+.sp
+.I method pattern : 
+.B Format.formatter -> Parsetree.pattern -> unit
+
+.sp
+
+.sp
+.I method pattern1 : 
+.B Format.formatter -> Parsetree.pattern -> unit
+
+.sp
+
+.sp
+.I method payload : 
+.B Format.formatter -> Parsetree.payload -> unit
+
+.sp
+
+.sp
+.I method private_flag : 
+.B Format.formatter -> Asttypes.private_flag -> unit
+
+.sp
+
+.sp
+.I method rec_flag : 
+.B Format.formatter -> Asttypes.rec_flag -> unit
+
+.sp
+
+.sp
+.I method nonrec_flag : 
+.B Format.formatter -> Asttypes.rec_flag -> unit
+
+.sp
+
+.sp
+.I method reset : 
+.B < attribute : Format.formatter -> Parsetree.attribute -> unit;
+.B     attributes : Format.formatter -> Parsetree.attributes -> unit;
+.B     binding : Format.formatter -> Parsetree.value_binding -> unit;
+.B     bindings : Format.formatter ->
+.B                Asttypes.rec_flag * Parsetree.value_binding list -> unit;
+.B     case_list : Format.formatter -> Parsetree.case list -> unit;
+.B     class_expr : Format.formatter -> Parsetree.class_expr -> unit;
+.B     class_field : Format.formatter -> Parsetree.class_field -> unit;
+.B     class_params_def : Format.formatter ->
+.B                        (Parsetree.core_type * Asttypes.variance) list -> unit;
+.B     class_signature : Format.formatter -> Parsetree.class_signature -> unit;
+.B     class_structure : Format.formatter -> Parsetree.class_structure -> unit;
+.B     class_type : Format.formatter -> Parsetree.class_type -> unit;
+.B     class_type_declaration_list : Format.formatter ->
+.B                                   Parsetree.class_type_declaration list -> unit;
+.B     constant : Format.formatter -> Asttypes.constant -> unit;
+.B     constant_string : Format.formatter -> string -> unit;
+.B     core_type : Format.formatter -> Parsetree.core_type -> unit;
+.B     core_type1 : Format.formatter -> Parsetree.core_type -> unit;
+.B     direction_flag : Format.formatter -> Asttypes.direction_flag -> unit;
+.B     directive_argument : Format.formatter ->
+.B                          Parsetree.directive_argument -> unit;
+.B     exception_declaration : Format.formatter ->
+.B                             Parsetree.extension_constructor -> unit;
+.B     expression : Format.formatter -> Parsetree.expression -> unit;
+.B     expression1 : Format.formatter -> Parsetree.expression -> unit;
+.B     expression2 : Format.formatter -> Parsetree.expression -> unit;
+.B     extension : Format.formatter -> Parsetree.extension -> unit;
+.B     extension_constructor : Format.formatter ->
+.B                             Parsetree.extension_constructor -> unit;
+.B     floating_attribute : Format.formatter -> Parsetree.attribute -> unit;
+.B     item_attribute : Format.formatter -> Parsetree.attribute -> unit;
+.B     item_attributes : Format.formatter -> Parsetree.attributes -> unit;
+.B     item_extension : Format.formatter -> Parsetree.extension -> unit;
+.B     label_exp : Format.formatter ->
+.B                 Asttypes.label * Parsetree.expression option *
+.B                 Parsetree.pattern -> unit;
+.B     label_x_expression_param : Format.formatter ->
+.B                                Asttypes.label * Parsetree.expression -> unit;
+.B     list : 'a.
+.B              ?sep:Pprintast.space_formatter ->
+.B              ?first:Pprintast.space_formatter ->
+.B              ?last:Pprintast.space_formatter ->
+.B              (Format.formatter -> 'a -> unit) ->
+.B              Format.formatter -> 'a list -> unit;
+.B     longident : Format.formatter -> Longident.t -> unit;
+.B     longident_loc : Format.formatter -> Longident.t Asttypes.loc -> unit;
+.B     module_expr : Format.formatter -> Parsetree.module_expr -> unit;
+.B     module_type : Format.formatter -> Parsetree.module_type -> unit;
+.B     mutable_flag : Format.formatter -> Asttypes.mutable_flag -> unit;
+.B     nonrec_flag : Format.formatter -> Asttypes.rec_flag -> unit;
+.B     option : 'a.
+.B                ?first:Pprintast.space_formatter ->
+.B                ?last:Pprintast.space_formatter ->
+.B                (Format.formatter -> 'a -> unit) ->
+.B                Format.formatter -> 'a option -> unit;
+.B     paren : 'a.
+.B               ?first:Pprintast.space_formatter ->
+.B               ?last:Pprintast.space_formatter ->
+.B               bool ->
+.B               (Format.formatter -> 'a -> unit) ->
+.B               Format.formatter -> 'a -> unit;
+.B     pattern : Format.formatter -> Parsetree.pattern -> unit;
+.B     pattern1 : Format.formatter -> Parsetree.pattern -> unit;
+.B     payload : Format.formatter -> Parsetree.payload -> unit;
+.B     private_flag : Format.formatter -> Asttypes.private_flag -> unit;
+.B     rec_flag : Format.formatter -> Asttypes.rec_flag -> unit; reset : 'b;
+.B     reset_ifthenelse : 'b; reset_pipe : 'b; reset_semi : 'b;
+.B     signature : Format.formatter -> Parsetree.signature_item list -> unit;
+.B     signature_item : Format.formatter -> Parsetree.signature_item -> unit;
+.B     simple_expr : Format.formatter -> Parsetree.expression -> unit;
+.B     simple_pattern : Format.formatter -> Parsetree.pattern -> unit;
+.B     string_quot : Format.formatter -> Asttypes.label -> unit;
+.B     structure : Format.formatter -> Parsetree.structure_item list -> unit;
+.B     structure_item : Format.formatter -> Parsetree.structure_item -> unit;
+.B     sugar_expr : Format.formatter -> Parsetree.expression -> bool;
+.B     toplevel_phrase : Format.formatter -> Parsetree.toplevel_phrase -> unit;
+.B     type_declaration : Format.formatter -> Parsetree.type_declaration -> unit;
+.B     type_def_list : Format.formatter -> Parsetree.type_declaration list -> unit;
+.B     type_extension : Format.formatter -> Parsetree.type_extension -> unit;
+.B     type_param : Format.formatter ->
+.B                  Parsetree.core_type * Asttypes.variance -> unit;
+.B     type_params : Format.formatter ->
+.B                   (Parsetree.core_type * Asttypes.variance) list -> unit;
+.B     type_with_label : Format.formatter ->
+.B                       Asttypes.label * Parsetree.core_type -> unit;
+.B     tyvar : Format.formatter -> string -> unit; under_ifthenelse : 'b;
+.B     under_pipe : 'b; under_semi : 'b;
+.B     value_description : Format.formatter -> Parsetree.value_description -> unit;
+.B     virtual_flag : Format.formatter -> Asttypes.virtual_flag -> unit; .. >
+.B   as 'b
+
+.sp
+
+.sp
+.I method reset_semi : 
+.B 'b
+
+.sp
+
+.sp
+.I method reset_ifthenelse : 
+.B 'b
+
+.sp
+
+.sp
+.I method reset_pipe : 
+.B 'b
+
+.sp
+
+.sp
+.I method signature : 
+.B Format.formatter -> Parsetree.signature_item list -> unit
+
+.sp
+
+.sp
+.I method signature_item : 
+.B Format.formatter -> Parsetree.signature_item -> unit
+
+.sp
+
+.sp
+.I method simple_expr : 
+.B Format.formatter -> Parsetree.expression -> unit
+
+.sp
+
+.sp
+.I method simple_pattern : 
+.B Format.formatter -> Parsetree.pattern -> unit
+
+.sp
+
+.sp
+.I method string_quot : 
+.B Format.formatter -> Asttypes.label -> unit
+
+.sp
+
+.sp
+.I method structure : 
+.B Format.formatter -> Parsetree.structure_item list -> unit
+
+.sp
+
+.sp
+.I method structure_item : 
+.B Format.formatter -> Parsetree.structure_item -> unit
+
+.sp
+
+.sp
+.I method sugar_expr : 
+.B Format.formatter -> Parsetree.expression -> bool
+
+.sp
+
+.sp
+.I method toplevel_phrase : 
+.B Format.formatter -> Parsetree.toplevel_phrase -> unit
+
+.sp
+
+.sp
+.I method type_declaration : 
+.B Format.formatter -> Parsetree.type_declaration -> unit
+
+.sp
+
+.sp
+.I method type_def_list : 
+.B Format.formatter -> Parsetree.type_declaration list -> unit
+
+.sp
+
+.sp
+.I method type_extension : 
+.B Format.formatter -> Parsetree.type_extension -> unit
+
+.sp
+
+.sp
+.I method type_param : 
+.B Format.formatter -> Parsetree.core_type * Asttypes.variance -> unit
+
+.sp
+
+.sp
+.I method type_params : 
+.B Format.formatter -> (Parsetree.core_type * Asttypes.variance) list -> unit
+
+.sp
+
+.sp
+.I method type_with_label : 
+.B Format.formatter -> Asttypes.label * Parsetree.core_type -> unit
+
+.sp
+
+.sp
+.I method tyvar : 
+.B Format.formatter -> string -> unit
+
+.sp
+
+.sp
+.I method under_pipe : 
+.B 'b
+
+.sp
+
+.sp
+.I method under_semi : 
+.B 'b
+
+.sp
+
+.sp
+.I method under_ifthenelse : 
+.B 'b
+
+.sp
+
+.sp
+.I method value_description : 
+.B Format.formatter -> Parsetree.value_description -> unit
+
+.sp
+
+.sp
+.I method virtual_flag : 
+.B Format.formatter -> Asttypes.virtual_flag -> unit
+
+.sp
+
+.sp
+.I method attribute : 
+.B Format.formatter -> Parsetree.attribute -> unit
+
+.sp
+
+.sp
+.I method item_attribute : 
+.B Format.formatter -> Parsetree.attribute -> unit
+
+.sp
+
+.sp
+.I method floating_attribute : 
+.B Format.formatter -> Parsetree.attribute -> unit
+
+.sp
+
+.sp
+.I method attributes : 
+.B Format.formatter -> Parsetree.attributes -> unit
+
+.sp
+
+.sp
+.I method item_attributes : 
+.B Format.formatter -> Parsetree.attributes -> unit
+
+.sp
+
+.sp
+.I method extension : 
+.B Format.formatter -> Parsetree.extension -> unit
+
+.sp
+
+.sp
+.I method item_extension : 
+.B Format.formatter -> Parsetree.extension -> unit
+
+.sp
+
+.sp

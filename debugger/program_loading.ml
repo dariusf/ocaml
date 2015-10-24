@@ -95,7 +95,7 @@ let generic_exec_unix cmdline = function () ->
                 (* dup2 fd stdout; *)
                 (* close fd; *)
 
-                dup2 (Output_server.get_input_descr ()) stdout;
+                dup2 (Output_server.debuggee_put_things_in_here) stdout;
 
                 execv shell [| shell; "-c"; cmdline() |]
          | _ -> exit 0

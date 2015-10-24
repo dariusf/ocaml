@@ -45,7 +45,7 @@ let show_current_event ppf =
           (* print_newline () *)
         (* else begin *)
           let time_string = sprintf ":time %Li %s@." (current_time ()) ev.ev_module in
-          Output_server.write_to_server time_string;
+          Output_server.send_event time_string;
           (* fprintf ppf " - module %s@." ev.ev_module; *)
           (* flush Pervasives.stdout; *)
           (match breakpoints_at_pc pc with
@@ -64,7 +64,7 @@ let show_current_event ppf =
             (show_point ev true)
         (* end *)
   | Some {rep_type = Exited} ->
-      Output_server.write_to_server ":exit";
+      Output_server.send_event ":exit";
       show_no_point ()
   | Some {rep_type = Uncaught_exc} ->
       fprintf ppf
