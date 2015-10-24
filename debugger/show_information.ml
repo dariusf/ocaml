@@ -44,7 +44,7 @@ let show_current_event ppf =
           (* () *)
           (* print_newline () *)
         (* else begin *)
-          let time_string = sprintf ":time %Li@." (current_time ()) in
+          let time_string = sprintf ":time %Li %s@." (current_time ()) ev.ev_module in
           Output_server.write_to_server time_string;
           (* fprintf ppf " - module %s@." ev.ev_module; *)
           (* flush Pervasives.stdout; *)

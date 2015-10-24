@@ -60,12 +60,13 @@ let exit_if_parent_dead () =
   let ppid = Unix.getppid () in
   if ppid = 1
   then begin
-    print_endline "child: parent is dead, terminating";
+    (* print_endline "child: parent is dead, terminating"; *)
     (* shutdown (); *)
     exit 0
   end
   else begin
-    print_endline "child: parent not dead, continuing"; ()
+    (* print_endline "child: parent not dead, continuing"; *)
+    ()
   end
 
 let read_debuggee_output fd_in_channel =
@@ -80,11 +81,11 @@ let read_debuggee_output fd_in_channel =
     let line = try input_line fd_in_channel with End_of_file -> "" in
 
     match line with
-    | "" -> print_endline "done for now"; ()
+    | "" -> ()
+      (* print_endline "done for now"; *)
     | line ->
-        print_endline @@ "received: " ^ line;
+        (* print_endline @@ "received: " ^ line; *)
         write_to_server line;
-
         exit_if_parent_dead ()
   done
 
