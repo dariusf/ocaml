@@ -22,8 +22,6 @@ let debuggee_read_from_here = Unix.in_channel_of_descr debuggee_things_come_out_
 
 (* type client = Parent | Child *)
 
-(* TODO close sockets properly on termination *)
-
 (* let string_of_client = function
   | Parent -> "Parent"
   | Child -> "Child"
@@ -33,10 +31,12 @@ let print_as client msg =
  *)
 
 
-(* let shutdown () = *)
-(*   match !out_socket with *)
-(*   | None -> () *)
-(*   | Some socket -> Unix.close socket *)
+let client_socket = ref None
+
+let shutdown () =
+  match !client_socket with
+  | None -> ()
+  | Some socket -> Unix.close socket
 
 (* let write_to_server content (* = *)
   match !output_channel with
@@ -80,8 +80,7 @@ let read_debuggee_output fd_in_channel =
         exit_if_parent_dead ()
   done *)
 
-(* TODO close the used descriptors? *)
-(* 
+(*
 let process_child fd_in fd_out =
   Unix.close fd_out;
   (* connect_to_socket Child; *)
@@ -110,13 +109,13 @@ module CQueue = struct
 
   let take q =
     Mutex.lock q.lock;
-    while Queue.length q.queue = 0 
-    do Condition.wait q.non_empty q.lock done;  
+    while Queue.length q.queue = 0
+    do Condition.wait q.non_empty q.lock done;
     let x = Queue.take q.queue in
     Mutex.unlock q.lock; x;;
 end
 
-(* 
+(*
 
 let produce_continuously q n =
   while true do
@@ -135,8 +134,6 @@ List.iter Thread.join _producers
 ;;
  *)
 
-
-(* TODO close socket on quit *)
 
 let output_queue = CQueue.create ()
 
@@ -171,10 +168,11 @@ let read_from_debuggee () =
     let line = try Some (input_line debuggee_read_from_here) with End_of_file -> None in
 
     match line with
-    | None -> ()
-    (* print_endline "done for now"; *)
+    | None ->
+      print_endline "done for now";
+      ()
     | Some line ->
-    (* print_endline @@ "received: " ^ line; *)
+      print_endline @@ "received: " ^ line;
       send_event line
   done
 
@@ -183,6 +181,7 @@ let rec connect_to_buffer_server () =
     let socket = Unix.socket Unix.PF_INET Unix.SOCK_STREAM 0 in
     try
       Unix.connect socket (Unix.ADDR_INET (my_addr, port));
+      client_socket := Some socket;
       Unix.out_channel_of_descr socket
     with
     | Unix.Unix_error (Unix.ECONNREFUSED, _, _) ->

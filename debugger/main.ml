@@ -214,6 +214,7 @@ let main () =
     Clflags.recursive_types := true;    (* Allow recursive types. *)
     toplevel_loop ();                   (* Toplevel. *)
     kill_program ();
+    Output_server.shutdown ();
     exit 0
   with
     Toplevel ->
