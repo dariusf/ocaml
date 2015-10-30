@@ -34,7 +34,7 @@ let show_current_event ppf =
       fprintf ppf "@.Beginning of program.@.";
       show_no_point ()
   | Some {rep_type = (Event | Breakpoint); rep_program_pointer = pc} ->
-        
+
         let ev = get_current_event () in
 
         (* let excluded_modules = ["Pervasives"; "CamlinternalFormatBasics"; "Std_exit"] in *)
@@ -47,7 +47,9 @@ let show_current_event ppf =
           let time_string = sprintf ":time %Li %s@." (current_time ()) ev.ev_module in
           Output_server.send_event time_string;
           (* fprintf ppf " - module %s@." ev.ev_module; *)
+          (* print_string time_string; *)
           (* flush Pervasives.stdout; *)
+
           (match breakpoints_at_pc pc with
            | [] ->
                ()

@@ -169,10 +169,10 @@ let read_from_debuggee () =
 
     match line with
     | None ->
-      print_endline "done for now";
+      (* print_endline "done for now"; *)
       ()
     | Some line ->
-      print_endline @@ "received: " ^ line;
+      (* print_endline @@ "received: " ^ line; *)
       send_event line
   done
 
@@ -279,16 +279,20 @@ let write_to out_channel elt =
   output_string out_channel "\n";
   flush out_channel
 
-let last_non_time_stamp = ref None
+(* let last_non_time_stamp = ref None *)
 
-let before_go () =
+(* let before_go () = *)
   (* print_endline "just went"; *)
-  last_non_time_stamp := None
+  (* last_non_time_stamp := None *)
 
 let decide_what_to_write_to out_channel elt =
   (* write_to out_channel elt *)
   (* print_endline @@ " -> " ^ elt; *)
   match get_time elt with
+  | None ->
+    write_to out_channel @@ Printf.sprintf ":time %Ld %s" (Checkpoints.current_time ()) elt
+  | _ -> ()
+(*   match get_time elt with
   | Some time ->
       (* print_endline "got time"; *)
       begin match !last_non_time_stamp with
@@ -303,7 +307,7 @@ let decide_what_to_write_to out_channel elt =
   | None ->
       (* print_endline @@ "storing " ^ elt; *)
       begin match !last_non_time_stamp with
-      | None -> 
+      | None ->
           (* print_endline "just stored, nothing else" *)
             ()
       | Some thing ->
@@ -311,9 +315,10 @@ let decide_what_to_write_to out_channel elt =
           write_to out_channel thing
       end;
       last_non_time_stamp := Some elt
+ *)
 
 let consume_and_write_to out_channel =
-  
+
   while true do
     (* TODO get some escaping going on *)
     let elt = CQueue.take output_queue in

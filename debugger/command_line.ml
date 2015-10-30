@@ -371,7 +371,7 @@ let instr_goto ppf lexbuf =
   let time = int64_eol Lexer.lexeme lexbuf in
     ensure_loaded ();
     reset_named_values();
-    Output_server.before_go ();
+    (* Output_server.before_go (); *)
     go_to time;
     show_current_event ppf
 
@@ -737,7 +737,7 @@ let instr_last ppf lexbuf =
   in
     check_not_windows "last";
     reset_named_values();
-    Output_server.before_go ();
+    (* Output_server.before_go (); *)
     go_to (History.previous_time count);
     show_current_event ppf
 
