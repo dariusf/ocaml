@@ -199,17 +199,125 @@ let rec connect_to_buffer_server () =
   Mutex.unlock print_lock
  *)
 
+let starts_with str e =
+  let n_e = String.length e in
+  let n_s = String.length str in
+  if n_s < n_e then
+    false
+  else
+    let sub = String.sub str 0 n_e in
+    sub = e
+
+let get_time input =
+  (* print_endline @@ "get_time " ^ input; *)
+  (* print_endline @@ "get_time blah " ^ string_of_int (String.length input - 6); *)
+  if starts_with input ":time " then
+    try
+      Some (int_of_string @@ String.sub input 6 (String.length input - 6))
+    with Failure "int_of_string" -> None
+  else None
+
+let split s =
+  match s with
+  | "" -> []
+  | _ ->
+  let rec aux s i start =
+    try
+      match String.get s i with
+      | ' ' -> String.sub s start (i-start) :: aux s (i+1) i
+      | _ -> aux s (i+1) start
+    with Invalid_argument "index out of bounds" ->
+      [String.sub s start (i-start)]
+  in List.map String.trim @@ aux s 0 0
+;;
+
+(* split "a b" *)
+
+;;
+
+
+let get_time input =
+  (* print_endline @@ "get_time " ^ input; *)
+  (* print_endline @@ "get_time blah " ^ string_of_int (String.length input - 6); *)
+  if starts_with input ":time " then
+    try
+      Some (int_of_string @@ List.nth (split input) 1)
+    with Failure "int_of_string" -> None
+  else None
+
+let tests = [
+  lazy (starts_with "" "");
+  lazy (starts_with "a" "a");
+  lazy (starts_with "abc" "ab");
+  lazy (not @@ starts_with "a" "");
+  lazy (not @@ starts_with "a" "s");
+  lazy (not @@ starts_with "abc" "ac");
+
+  lazy (get_time "" = None);
+  lazy (get_time ":time" = None);
+  lazy (get_time ":time " = None);
+  lazy (get_time "asd" = None);
+  lazy (get_time ":time 123" = Some 123);
+  lazy (get_time ":time 1" = Some 1);
+
+]
+
+let tests2 = [
+  lazy (split "" = []);
+  lazy (split "a" = ["a"]);
+  lazy (split "a b" = ["a"; "b"]);
+  lazy (split "a b c" = ["a"; "b"; "c"]);
+]
+;;
+
+(* List.iteri (fun i t -> print_endline @@ string_of_int i; print_endline @@ string_of_bool (Lazy.force t)) tests2 *)
+
+;;
+
 let write_to out_channel elt =
   output_string out_channel elt;
   output_string out_channel "\n";
   flush out_channel
 
+let last_non_time_stamp = ref None
+
+let before_go () =
+  (* print_endline "just went"; *)
+  last_non_time_stamp := None
+
+let decide_what_to_write_to out_channel elt =
+  (* write_to out_channel elt *)
+  (* print_endline @@ " -> " ^ elt; *)
+  match get_time elt with
+  | Some time ->
+      (* print_endline "got time"; *)
+      begin match !last_non_time_stamp with
+      | None ->
+      (* print_endline "no buffering element"; *)
+          ()
+      | Some last ->
+      (* print_endline @@ "buffering element " ^ last; *)
+          last_non_time_stamp := None;
+          write_to out_channel @@ Printf.sprintf ":time %d %s" time last
+      end
+  | None ->
+      (* print_endline @@ "storing " ^ elt; *)
+      begin match !last_non_time_stamp with
+      | None -> 
+          (* print_endline "just stored, nothing else" *)
+            ()
+      | Some thing ->
+          (* print_endline @@ "also sending" ^ thing; *)
+          write_to out_channel thing
+      end;
+      last_non_time_stamp := Some elt
+
 let consume_and_write_to out_channel =
+  
   while true do
     (* TODO get some escaping going on *)
     let elt = CQueue.take output_queue in
-    write_to out_channel elt
-    (* do_locked print_lock (fun () -> print_endline @@ "took " ^ string_of_int elt) *)
+    decide_what_to_write_to out_channel elt
   done
 
 let start () =
