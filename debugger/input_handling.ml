@@ -89,7 +89,12 @@ let main_loop () =
 (* Are we in interactive mode ? *)
 let interactif = ref true
 
-let current_prompt = ref ""
+let question = ref None
+
+let current_prompt () =
+  match !question with
+  | None -> Printf.sprintf "(ocd %Ld) " (Checkpoints.current_time ())
+  | Some q -> q ^ " ? (y or n) "
 
 (* Where the user input come from. *)
 let user_channel = ref std_io
@@ -106,7 +111,7 @@ let stop_user_input () =
 let resume_user_input () =
   if not (List.mem_assoc !user_channel.io_fd !active_files) then begin
     if !interactif then begin
-      print_string !current_prompt;
+      print_string (current_prompt ());
       flush Pervasives.stdout
       end;
     add_file !user_channel exit_main_loop

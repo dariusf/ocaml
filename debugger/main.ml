@@ -132,10 +132,8 @@ let execute_file_if_any () =
 
 let toplevel_loop () =
   interactif := false;
-  current_prompt := "";
   execute_file_if_any ();
   interactif := true;
-  current_prompt := debugger_prompt;
   protect Format.std_formatter loop loop
 
 (* Parsing of command-line arguments *)

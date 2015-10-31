@@ -16,9 +16,8 @@ open Primitives
 (* Ask user a yes or no question. *)
 let yes_or_no message =
   if !interactif then
-    let old_prompt = !current_prompt in
       try
-        current_prompt := message ^ " ? (y or n) ";
+        question := Some (message ^ " ? (y or n) ");
         let answer =
           let rec ask () =
             resume_user_input ();
@@ -36,11 +35,11 @@ let yes_or_no message =
           in
             ask ()
         in
-          current_prompt := old_prompt;
+          question := None;
           answer
       with
         x ->
-          current_prompt := old_prompt;
+          question := None;
           stop_user_input ();
           raise x
   else

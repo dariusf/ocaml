@@ -17,7 +17,6 @@ exception Toplevel
 
 (*** Miscellaneous parameters. ***)
 
-val debugger_prompt : string
 val event_mark_before : string
 val event_mark_after : string
 val shell : string

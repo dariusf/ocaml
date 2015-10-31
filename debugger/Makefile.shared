@@ -56,13 +56,13 @@ OBJS=\
 	debugger_config.cmo \
 	parameters.cmo \
 	lexer.cmo \
+	checkpoints.cmo \
 	input_handling.cmo \
 	question.cmo \
 	debugcom.cmo \
 	exec.cmo \
 	source.cmo \
 	pos.cmo \
-	checkpoints.cmo \
 	events.cmo \
     output_server.cmo \
 	program_loading.cmo \

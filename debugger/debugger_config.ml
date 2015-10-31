@@ -40,11 +40,9 @@ exception Toplevel
 45      for purple background
 46      for cyan background
 47      for white (or gray) background
-let debugger_prompt   = "\027[1;04m(ocd)\027[0m "
 and event_mark_before = "\027[1;31m$\027[0m"
 and event_mark_after  = "\027[1;34m$\027[0m"
 *)
-let debugger_prompt   = "(ocd) "
 let event_mark_before = "<|b|>"
 let event_mark_after  = "<|a|>"
 

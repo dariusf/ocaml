@@ -44,7 +44,9 @@ val main_loop : unit -> unit
 (* Are we in interactive mode ? *)
 val interactif : bool ref
 
-val current_prompt : string ref
+val current_prompt : unit -> string
+
+val question : (string option) ref
 
 (* Where the user input come from. *)
 val user_channel : io_channel ref
