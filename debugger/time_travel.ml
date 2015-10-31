@@ -419,7 +419,13 @@ let recover () =
 
 (* Forward stepping.  Requires `duration >= 0'. *)
 let rec step_forward duration =
-  if duration > !checkpoint_small_step then begin
+  let open Int64 in
+  if compare duration zero <= 0 then ()
+  else begin
+    internal_step one;
+    step_forward (sub duration one)
+  end
+(*   if duration > !checkpoint_small_step then begin
     let first_step =
       if duration > !checkpoint_big_step then
         !checkpoint_big_step
@@ -432,7 +438,7 @@ let rec step_forward duration =
     end
   else if duration != _0 then
     internal_step duration
-
+ *)
 (* Go to time `time' from current checkpoint (internal). *)
 let internal_go_to time =
   let duration = time -- (current_time ()) in
