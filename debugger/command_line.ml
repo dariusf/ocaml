@@ -306,16 +306,31 @@ let instr_reverse ppf lexbuf =
   back_run ();
   show_current_event ppf
 
+let instr_step_count ppf step_count =
+    ensure_loaded ();
+    reset_named_values();
+    step step_count;
+    show_current_event ppf
+
 let instr_step ppf lexbuf =
   let step_count =
     match opt_signed_int64_eol Lexer.lexeme lexbuf with
     | None -> _1
     | Some x -> x
   in
-    ensure_loaded ();
-    reset_named_values();
-    step step_count;
-    show_current_event ppf
+    instr_step_count ppf step_count
+
+let is_end_done () =
+    match current_report () with
+    | Some {rep_type = Event} -> false
+    | _ -> true
+
+let instr_end ppf lexbuf =
+  eol lexbuf;
+  instr_step_count ppf Int64.one;
+  while (not @@ is_end_done ()) do
+    step (~~"10000");
+  done
 
 let instr_back ppf lexbuf =
   let step_count =
@@ -1016,6 +1031,9 @@ With no argument, reset the search path." };
        instr_action = instr_step; instr_repeat = true; instr_help =
 "step program until it reaches the next event.\n\
 Argument N means do this N times (or till program stops for another reason)." };
+     { instr_name = "end"; instr_prio = true;
+       instr_action = instr_end; instr_repeat = false; instr_help =
+"step to the end of the program." };
      { instr_name = "backstep"; instr_prio = true;
        instr_action = instr_back; instr_repeat = true; instr_help =
 "step program backward until it reaches the previous event.\n\
